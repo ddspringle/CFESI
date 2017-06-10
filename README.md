@@ -5,8 +5,17 @@ Current version: 1.0.7
 
 The EVEESIService CFC contains an API interface to the [Eve Online ESI API](https://esi.tech.ccp.is/latest/) - latest build: 2017-06-10
 
-This code **does not** contain any Oauth interface (yet) nor does it do any error handling, this is left to the implementation of the API and not handled directly within the API itself.
+This code **does not** contain any Oauth interface (yet) nor does it do any error handling, this is left to the implementation of the API wrapper and not handled directly within the API wrapper itself.
 
+This wrapper returns the result of the http call to the API. To get the data returned from the ESI API, use `serializeJSON( [apiResult].fileContent.toString() )`. For example:
+
+```
+  esi = new EVEESIService();
+  
+  allianceStruct = serializeJSON( esi.getAlliances().fileContent.toString() );
+  
+  writeDump( allianceStruct );
+```
 
 ## Compatibility
 
