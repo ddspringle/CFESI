@@ -13,6 +13,7 @@ component displayname="EVESSOService" accessors="true" {
 	property redirectURL;
 	property loginURL;
 	property tokenURL;
+	property verifyURL;
 	property userAgent;
 	property scopes;
 
@@ -24,6 +25,7 @@ component displayname="EVESSOService" accessors="true" {
 	* @param 		redirectURL {String} required - I am the redirect url you registered with your application
 	* @param 		loginURL {String} - I am the base url used for SSO logins. Default: https://login.eveonline.com/oauth/authorize/
 	* @param 		tokenURL {String} - I am the base url used for SSO tokens. Default: https://login.eveonline.com/oauth/token
+	* @param 		verifyURL {String} - I am the base url used for obtaining character information. Default: https://login.eveonline.com/oauth/verify
 	* @param 		userAgent {String} - I am the user agent string to send to CCP (should include char name, email and host information)
 	* @param 		scopes {String} - I am a space delimited list of ESI scopes to request access to from the user. Default: all of them :P
 	*/
@@ -33,6 +35,7 @@ component displayname="EVESSOService" accessors="true" {
 		required string redirectURL,
 		string loginURL = 'https://login.eveonline.com/oauth/authorize/',
 		string tokenURL = 'https://login.eveonline.com/oauth/token',
+		string verifyURL = 'https://login.eveonline.com/oauth/verify',
 		string userAgent = 'CFESI v1.0 (author: Silly Noob - denard.springle@gmail.com) [host: http://#CGI.HTTP_HOST#/]',
 		string scopes = 'esi-calendar.respond_calendar_events.v1 esi-calendar.read_calendar_events.v1 esi-location.read_location.v1 esi-location.read_ship_type.v1 esi-mail.organize_mail.v1 esi-mail.read_mail.v1 esi-mail.send_mail.v1 esi-skills.read_skills.v1 esi-skills.read_skillqueue.v1 esi-wallet.read_character_wallet.v1 esi-search.search_structures.v1 esi-clones.read_clones.v1 esi-characters.read_contacts.v1 esi-universe.read_structures.v1 esi-bookmarks.read_character_bookmarks.v1 esi-killmails.read_killmails.v1 esi-corporations.read_corporation_membership.v1 esi-assets.read_assets.v1 esi-planets.manage_planets.v1 esi-fleets.read_fleet.v1 esi-fleets.write_fleet.v1 esi-ui.open_window.v1 esi-ui.write_waypoint.v1 esi-characters.write_contacts.v1 esi-fittings.read_fittings.v1 esi-fittings.write_fittings.v1 esi-markets.structure_markets.v1 esi-corporations.read_structures.v1 esi-corporations.write_structures.v1 esi-characters.read_loyalty.v1 esi-characters.read_opportunities.v1 esi-characters.read_chat_channels.v1 esi-characters.read_medals.v1 esi-characters.read_standings.v1 esi-characters.read_agents_research.v1 esi-industry.read_character_jobs.v1 esi-markets.read_character_orders.v1 esi-characters.read_blueprints.v1 esi-characters.read_corporation_roles.v1 esi-location.read_online.v1'
 	) {
@@ -41,6 +44,7 @@ component displayname="EVESSOService" accessors="true" {
 		variables.redirectURL = arguments.redirectURL;
 		variables.loginURL = arguments.loginURL;
 		variables.tokenURL = arguments.tokenURL;
+		variables.verifyURL = arguments.verifyURL;
 		variables.userAgent = arguments.userAgent;
 		variables.scopes = arguments.scopes;
 
@@ -140,6 +144,38 @@ component displayname="EVESSOService" accessors="true" {
 		
 	}
 
+
+	/**
+	* @displayname	getCharacterDataByVerification
+	* @description	I get character information from the SSO verification mechanism
+	* @param 		accessToken {String} required - I am the current access token for this user
+	* @return		struct
+	*/
+	public struct function getCharacterDataByVerification( required string accessToken ) {
+
+		// get the http service
+		var httpService = new http();
+		var apiResult = '';
+
+		// set the url
+		httpService.setUrl( variables.verifyURL );
+		// set the method
+		httpService.setMethod( 'GET' );
+		// set the character set
+		httpService.setCharset( 'UTF-8' );
+		// set the user agent string
+		httpService.setUserAgent( variables.userAgent );
+
+		// add form field parameters to the http request
+		httpService.addParam( name = 'Authorization', type = 'header', value = 'Bearer #arguments.accessToken#' );
+
+		// make the http call
+		apiResult = httpService.send().getPrefix();
+
+		// return the parsed results
+		return serializeJSON( apiResult.fileContent.toString() );
+		
+	}
 	/**
 	* @displayname	getIPAddress
 	* @description	I am a private convenience function used to return the IP address of the client
