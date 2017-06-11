@@ -130,7 +130,7 @@ component displayname="EVESSOService" accessors="true" {
 
 		// add form field parameters to the http request
 		httpService.addParam( name = 'grant_type', type = 'formfield', value = 'refresh_token' );
-		httpService.addParam( name = 'refreshToken', type = 'formfield', value = arguments.refreshToken );
+		httpService.addParam( name = 'refresh_token', type = 'formfield', value = arguments.refreshToken );
 
 		// make the http call
 		apiResult = httpService.send().getPrefix();
