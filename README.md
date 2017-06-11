@@ -20,6 +20,7 @@ The SSO wrapper will automatically parse the JSON results and return them.
 	writeDump( esi.getAlliances() );
 ```
 
+[Full documentation of the CFESI API Wrapper](https://github.com/ddspringle/CFESI/wiki/API-Wrapper-Documentation)
 
 ### Sample SSO Usage
 
