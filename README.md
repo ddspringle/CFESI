@@ -26,7 +26,7 @@ The SSO wrapper will automatically parse the JSON results and return them.
 Login Page:
 
 ```
-	sso = new EVESSOService( clientId = '[YOUR CLIENT ID]', secretKey = '[YOUR SECRET KEY]', redirectURL = '[YOUR URL]' );
+	sso = new EVESSOService( clientId = '[CLIENT ID]', secretKey = '[SECRET KEY]', redirectURL = '[URL]' );
 
 	<a href="#sso.getLoginURL()#">Login With Eve Online</a>
 ```
