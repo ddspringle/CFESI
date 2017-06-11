@@ -1,21 +1,46 @@
 # CFESI
 An ESI API wrapper for Eve Online written in CFML
 
-Current version: 1.0.7
+Current version: 1.0.8
 
 The EVEESIService CFC contains an API interface to the [Eve Online ESI API](https://esi.tech.ccp.is/latest/) - latest build: 2017-06-10
 
-This code **does not** contain any Oauth interface (yet) nor does it do any error handling, this is left to the implementation of the API wrapper and not handled directly within the API wrapper itself.
+This code is bundled with the EVESSOService CFC which provides functions to assist with getting OAuth 2.0 tokens from Eve Online for use with the API. Error handling in these CFC's are minimal, at best, and this is best left to the implementation of the API wrapper and not handled directly within the API wrapper itself.
 
-This wrapper returns the result of the http call to the API. To get the data returned from the ESI API, use `serializeJSON( [apiResult].fileContent.toString() )`. For example:
+The ESI API wrapper will check for a successful call (HTTP 200 OK) and will automatically parse the JSON results and return them. Any other status code will return the entire http result, including headers and other information for debug purposes.
+
+The SSO wrapper will automatically parse the JSON results and return them. 
+
+
+### Sample ESI Usage:
 
 ```
-  esi = new EVEESIService();
+	esi = new EVEESIService();
   
-  allianceStruct = serializeJSON( esi.getAlliances().fileContent.toString() );
-  
-  writeDump( allianceStruct );
+	writeDump( esi.getAlliances() );
 ```
+
+
+### Sample SSO Usage
+
+Login Page:
+
+```
+	sso = new EVESSOService( clientId = '[YOUR CLIENT ID]', secretKey = '[YOUR SECRET KEY]', redirectURL = '[YOUR URL]' );
+
+	<a href="#sso.getLoginURL()#">Login With Eve Online</a>
+```
+
+Callback:
+
+```
+	if( sso.hasCorrectState( URL.state ) ) {
+		tokenStruct = sso.getAccessTokenByAuthCode( URL.code );
+	}
+
+	writeDump( tokenStruct );
+```
+
 
 ## Compatibility
 
