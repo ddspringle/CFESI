@@ -1,7 +1,7 @@
 # CFESI
 An ESI API wrapper for Eve Online written in CFML
 
-Current version: 1.0.8
+Current version: 1.0.9
 
 The EVEESIService CFC contains an API interface to the [Eve Online ESI API](https://esi.tech.ccp.is/latest/) - latest build: 2017-06-10
 
