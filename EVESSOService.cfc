@@ -102,8 +102,14 @@ component displayname="EVESSOService" accessors="true" {
 		// make the http call
 		apiResult = httpService.send().getPrefix();
 
-		// return the parsed results
-		return serializeJSON( apiResult.fileContent.toString() );
+		// check if the http call was successful
+		if( apiResult.status_code eq 200 ) {
+			// it was, return the JSON deserialized to a struct
+			return deserializeJSON( apiResult.fileContent.toString() );
+		}
+
+		// otherwise, return the full http result
+		return apiResult;
 
 	}
 
@@ -139,8 +145,14 @@ component displayname="EVESSOService" accessors="true" {
 		// make the http call
 		apiResult = httpService.send().getPrefix();
 
-		// return the parsed results
-		return serializeJSON( apiResult.fileContent.toString() );
+		// check if the http call was successful
+		if( apiResult.status_code eq 200 ) {
+			// it was, return the JSON deserialized to a struct
+			return deserializeJSON( apiResult.fileContent.toString() );
+		}
+
+		// otherwise, return the full http result
+		return apiResult;
 		
 	}
 
@@ -172,8 +184,14 @@ component displayname="EVESSOService" accessors="true" {
 		// make the http call
 		apiResult = httpService.send().getPrefix();
 
-		// return the parsed results
-		return serializeJSON( apiResult.fileContent.toString() );
+		// check if the http call was successful
+		if( apiResult.status_code eq 200 ) {
+			// it was, return the JSON deserialized to a struct
+			return deserializeJSON( apiResult.fileContent.toString() );
+		}
+
+		// otherwise, return the full http result
+		return apiResult;
 		
 	}
 	/**
